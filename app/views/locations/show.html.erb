@@ -1,0 +1,87 @@
+<p id="notice"><%= notice %></p>
+
+
+	<h2><center>You Are Currently Standing At...</center></h2>
+
+	<p>
+ 	 <%= @location.my_location %>
+	</p>
+
+	<h2><center>The Closest Buses Are...</center></h2>
+
+	<% if @bus_count == 0 %>	
+		<p> ...not really that close. Better order an Uber. Or Lyft. Or call a friend. Or just give up and go back inside and watch some TV. Going places is overrated.
+		</p>
+	<% end %>
+				<div class="row">
+		<% @nearby_buses.each_with_index do |bus, index| %>
+
+			<div class="col-md-4">
+			<div class="thumbnail">
+			<p>
+				<strong>Route:</strong> <%= bus["ROUTE"] %><br />
+				<strong>Vehicle:</strong> <%= bus["VEHICLE"] %><br />
+				<strong>Next Stop:</strong> <%= bus["TIMEPOINT"] %>
+			</p>
+
+	<script>
+	  $(document).ready(function (){
+	      function initialize(){
+	      var userCoords = new google.maps.LatLng(<%= @location.latitude %>, <%= @location.longitude %>);
+	      var busCoords = new google.maps.LatLng(<%= bus["LATITUDE"] %>, <%= bus["LONGITUDE"] %>);
+
+	      var mapOptions = {
+	      	center: userCoords,
+	      	zoom: 13,
+	      	scrollwheel: false
+	      };
+			      
+	      var map = new google.maps.Map(document.getElementById('map-canvas<%= index %>'), mapOptions);
+	        
+	      var busPic = {
+	      	url: 'http://www.motorbussociety.org/conventn/01spr/MARTA%203163.jpg',
+	      	scaledSize: new google.maps.Size(50, 50)
+	      };
+
+	      var contentString = '<h5>Get on the bus!</h5>';
+
+	      var contentStringUser = '<h5>You are Here!</h5>';
+
+	      var infoWindow = new google.maps.InfoWindow({
+	      	content:contentString
+	      });
+
+	      var infoWindowUser = new google.maps.InfoWindow({
+	      	content: contentStringUser
+	      })
+
+	      var marker = new google.maps.Marker({
+	      	position: busCoords,
+	      	map: map,
+	      	icon: busPic,
+	      	animation: google.maps.Animation.DROP
+	      });
+
+	      var userMarker = new google.maps.Marker({
+	      	position: userCoords,
+	      	map: map,
+	      	animation: google.maps.Animation.DROP
+	      });
+
+	      google.maps.event.addListener(marker, 'click', function(){
+	      	infoWindow.open(map,marker);
+	      });
+
+	      google.maps.event.addListener(userMarker, 'click', function(){
+	      	infoWindowUser.open(map,userMarker);
+	      });
+	    }
+	  google.maps.event.addDomListener(window, 'load', initialize);
+	  });
+	</script>
+	  <div class="bus-map" id="map-canvas<%= index %>"></div>
+	  </div>
+	  </div>
+	<% end %>
+	</div>
+	<%= link_to "Actually, I'm at...", edit_location_path(@location) %>
