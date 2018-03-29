@@ -13,18 +13,18 @@
 		<p> ...not really that close. Better order an Uber. Or Lyft. Or call a friend. Or just give up and go back inside and watch some TV. Going places is overrated.
 		</p>
 	<% end %>
-				<div class="row">
+		<div class="row">
 		<% @nearby_buses.each_with_index do |bus, index| %>
 
-			<div class="col-md-4">
-			<div class="thumbnail">
-			<p>
-				<strong>Route:</strong> <%= bus["ROUTE"] %><br />
-				<strong>Vehicle:</strong> <%= bus["VEHICLE"] %><br />
-				<strong>Next Stop:</strong> <%= bus["TIMEPOINT"] %>
-			</p>
+			<div class="col-sm-4">
+				<div class="thumbnail">
+					<p>
+						<strong>Route:</strong> <%= bus["ROUTE"] %><br />
+						<strong>Vehicle:</strong> <%= bus["VEHICLE"] %><br />
+						<strong>Next Stop:</strong> <%= bus["TIMEPOINT"] %>
+					</p>
 
-	<script>
+					<script>
 	  $(document).ready(function (){
 	      function initialize(){
 	      var userCoords = new google.maps.LatLng(<%= @location.latitude %>, <%= @location.longitude %>);
